@@ -1,0 +1,16 @@
+Flask~=0.12.5
+nltk==3.4.5
+colorama==0.4.1
+rake_nltk==1.0.4
+gunicorn
+Unidecode
+wolframalpha~=5.0.0
+wikipedia~=1.4.0
+gevent~=21.1.2
+Flask-Bootstrap
+flask-appconfig
+Flask-WTF
+WTForms~=2.3.3
+google~=3.0.0
+spacy~=3.0.5
+translate~=3.5.0
