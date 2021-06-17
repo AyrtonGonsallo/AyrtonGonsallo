@@ -115,17 +115,30 @@ block content %}
   </head>
   <body>
     <div class="header">
-      <h1>SL DevCode - Question Answering System</h1>
+      <h1>SL DevCode - Text resume System</h1>
     </div>
 
 
     <div class="row">
       <div class="main">
-        <h2 style="color: red"><center>Enter your Question?</center></h2>
+      {% if entrez_texte %}
+        <h2 style="color: red"><center>Enter your text</center></h2>
         <center>
           {{ wtf.quick_form(form, button_map={'submit_button': 'primary'}) }}
         </center>
-
+      {% endif %}
+          {% if voir_resume %}
+          <h1 style="color: brown">texte initial</h1>
+          <p style="white-space: pre-line">
+            {{ texte}}
+          </p>
+          <b style="color: darkblue">longueur initiale</b> {{ longueur_initiale }}
+          <h1 style="color: red">resume</h1>
+          <p style="white-space: pre-line">
+            {{ resume }}
+          </p>
+              <b style="color: darkblue">longueur finale</b> {{ longueur_finale }}
+          {% endif %}
         <div class="container">
           <table class="table">
             <thead>
@@ -185,10 +198,7 @@ block content %}
 
     <div class="footer">
       <h2>SL DevCode</h2>
-        <a href="{{ url_for('resume') }}">Go to resume text</a><br>
-        <a href="{{ url_for('questions_intelligentes') }}">Go to questions intellientes</a><br>
         <a href="{{ url_for('default') }}">Go to generate questions from text</a>
-
     </div>
   </body>
 </html>

@@ -6,6 +6,7 @@ from flask import url_for
 import os
 import datetime
 import main
+from resume import summarize
 from hashlib import sha256
 from colorama import init  # 0.4.1
 from colorama import Fore
@@ -15,12 +16,13 @@ from flask import Flask, render_template, request
 from flask_bootstrap import Bootstrap
 from flask_appconfig import AppConfig
 from flask_wtf import Form, RecaptchaField
-from wtforms import TextField, StringField, HiddenField, ValidationError, RadioField, BooleanField, SubmitField
+from wtforms import TextAreaField, StringField, HiddenField, ValidationError, RadioField, BooleanField, SubmitField
 from wtforms.validators import DataRequired
 from repondre_aux_questions import reponse_finale
 import re
 import gevent.monkey
 from gevent.pywsgi import WSGIServer
+
 gevent.monkey.patch_all()
 
 
@@ -75,6 +77,49 @@ def create_app(configfile=None):
         form = ExampleForm()
         return render_template('index.html', form=form)
 
+    @app.route('/resume', methods=('GET', 'POST'))
+    def resume():
+        if request.method == 'POST':
+            try:
+                text_initial = request.form['text']
+            except Exception as e:
+                print("key error")
+                print("I got a KeyError - reason %s") % str(e)
+            except Exception as e:
+                print("I got another exception, but I should re-raise")
+                raise
+
+            # print(text)
+            text_resume = summarize(text_initial)
+            # print("resume: "), text_resume
+            answer = re.sub('([(].*?[)])', "", text_resume)
+
+            return render_template('resume.html', entrez_text=None, voir_resume="true", resume=answer, texte=text_initial, longueur_finale=len(text_resume), longueur_initiale=len(text_initial))
+
+        form = ResumeForm()
+        return render_template('resume.html', form=form,voit_resume=None, entrez_texte="true")
+
+    @app.route('/questions_intelligentes', methods=('GET', 'POST'))
+    def questions_intelligentes():
+        if request.method == 'POST':
+            try:
+                texte = request.form['text']
+            except Exception as e:
+                print("key error")
+                print("I got a KeyError - reason %s") % str(e)
+            except Exception as e:
+                print("I got another exception, but I should re-raise")
+                raise
+
+
+            questions_avec_interrogation = main.generer(texte)
+            # answer = re.sub('([(].*?[)])', "", text_resume)
+
+            return render_template('questions_intelligentes.html', entrez_text=None, voir_questions="true", questions=questions_avec_interrogation,
+                                   texte=texte)
+
+        form = ResumeForm()
+        return render_template('questions_intelligentes.html', form=form, voit_questions=None, entrez_texte="true")
 
     @app.route("/generate", methods=["POST"])
     def generate():
@@ -93,12 +138,11 @@ def create_app(configfile=None):
         # make questions
         raw_data = str(request.form.get("data"))
         questions_avec_blancs = Document(raw_data).format_questions()
-        questions_avec_interrogation = main.generer(raw_data)
+
         log("Created session id", session_id=session_id)
 
         # store data
         data[session_id] = {
-            "rep": questions_avec_interrogation,
             "questions": questions_avec_blancs
         }
         # timer to delete data
@@ -122,20 +166,18 @@ def create_app(configfile=None):
 
         if session_id in data:
 
-            rep = data[session_id]["rep"]
+
             qu = data[session_id]["questions"]
 
             return render_template(
                 "questions.html",
                 session_id=session_id,
-                rep=rep,
                 Question=qu
             )
         else:
             # we dont have them at all (never made questions or it timed out and got deleted)
             log("No available questions (session id not found, timed out?), returning to home page")
             return redirect(url_for("default"))
-
 
     @app.route("/generate", methods=["GET"])
     def redirect_to_default():
@@ -150,18 +192,18 @@ def create_app(configfile=None):
     return app
 
 
-
-
 # init colorama, reset coloring on each print
 init(autoreset=True)
 
 
 class ExampleForm(Form):
-    question = StringField('', description='', validators=[DataRequired()])
-    submit_button = SubmitField('Go')
+    question = StringField('', description='', validators=[DataRequired()], )
+    submit_button = SubmitField('answer')
 
 
-
+class ResumeForm(Form):
+    text = TextAreaField('', description='', validators=[DataRequired()], render_kw={'style': 'height: 50ch;width:100ch;', "rows": 70, "cols": 11}, )
+    submit_button = SubmitField('resume')
 
 
 """
@@ -176,9 +218,6 @@ class ExampleForm(Form):
 }
 """
 data = dict()
-
-
-
 
 
 def get_hash():
@@ -255,4 +294,3 @@ if __name__ == '__main__':
     http_server = WSGIServer(('127.0.0.1', 9191), app)
     print("starting server on port 9191")
     http_server.serve_forever()
-

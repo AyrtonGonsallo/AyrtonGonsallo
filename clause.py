@@ -504,7 +504,6 @@ def howmuch_2(segment_set, num, ner):
     gram = r"""chunk:{<\$>*<CD>+<MD>?<VB|VBD|VBG|VBP|VBN|VBZ|RP>+}"""
     chunkparser = nltk.RegexpParser(gram)
     chunked = chunkparser.parse(tag)
-
     list1 = identification.chunk_search(segment_set[num], chunked)
     list3 = []
 

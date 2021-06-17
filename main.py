@@ -26,4 +26,8 @@ def generer(entree):
 
 # Call Main Function
 if __name__ == "__main__":
-    main()
+    inputText = "Barça conceded a capital defeat on Saturday night against Real Madrid. A result which complicates the affairs of the Blaugrana in the title race and which generates a lot of frustration. Pique exacerbated by arbitration decisions was annoyed. The additional time of four minutes deemed insufficient and the penalty not awarded for an alleged foul by Mendy on Braithwaite has angered the Blaugrana."
+
+    r = generer(inputText)
+    print(r)
+
