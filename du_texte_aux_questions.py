@@ -99,16 +99,16 @@ class Sentence:
 
         self._questions = dict()
 
-        # all possible words that can be used as answers
+        # reperer les mots importants
         clean_words = [word.lower() for word in self._words if self._is_clean(word)]
         dt = TWD()
 
         for word in clean_words:
-            # use lowercase for better equality check
+            # verification en miniscule
             lower_words = [word.lower() for word in self._words]
-            # don't use lower_words to preserve capitalization
+
             words_copy = self._words.copy()
-            # put a blank in place of the word
+            # mettre un espace
             for index in [index for index, value in enumerate(lower_words) if value == word]:
                 words_copy[index] = "_____"
             self._questions[word] = dt.detokenize(words_copy)
@@ -122,7 +122,7 @@ class Sentence:
 
         word_pos = pos_tagger.tag([word])[0][1]
 
-        # check if its a keyword
+        # si  c'est un mot clé
         if not word.lower() in self._keywords:
             return False
 

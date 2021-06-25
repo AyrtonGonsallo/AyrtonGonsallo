@@ -4,7 +4,7 @@ block content %}
 
 <html lang="en">
   <head>
-    <title>EduEasy</title>
+    <title>Apprentissage Facile</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
@@ -115,14 +115,14 @@ block content %}
   </head>
   <body>
     <div class="header">
-      <h1>SL DevCode - Smart Questions</h1>
+      <h1>Apprentissage Facile - Questions basées sur l'analyse grammaticale</h1>
     </div>
 
 
     <div class="row">
       <div class="main">
       {% if entrez_texte %}
-        <h2 style="color: red"><center>Enter your text</center></h2>
+        <h2 style="color: red"><center>Entrez votre texte</center></h2>
         <center>
           {{ wtf.quick_form(form, button_map={'submit_button': 'primary'}) }}
         </center>
@@ -201,8 +201,8 @@ block content %}
     </div>
 
     <div class="footer">
-      <h2>SL DevCode</h2>
-        <a href="{{ url_for('default') }}">Go to generate questions from text</a>
+      <h2>Apprentissage Facile</h2>
+        <a href="{{ url_for('default') }}">Generer des questions avec des blancs</a>
     </div>
   </body>
 </html>

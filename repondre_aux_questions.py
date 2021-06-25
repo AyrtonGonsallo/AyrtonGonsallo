@@ -94,16 +94,16 @@ def wiki_search(question):
     if len(l) > 2:
         ques = " ".join(l[2:])
     try:
-        print("inside wiki search")
+        print("recherche wikipedia")
         ans = (wikipedia.summary(question, sentences=1)).encode('ascii', 'ignore')
         ans = re.sub('([(].*?[)])', "", ans)
         print(ans)
         link = wikipedia.page(ques)
-        ans = ans + '\n For more information: '+link.url
+        ans = ans + '\n Pour plus d\'informations: '+link.url
         print('Reference: ', link.url)
-        print("ans")
+        print("reponse")
     except :
-        print("wiki_search_failed_google")
+        print("recherche wiki echouée")
         google_search(question)
     return ans
 
@@ -112,7 +112,7 @@ def reponse_finale(question):
     try:
         app_id = 'W837XL-LKW945H2AU'    # l'id de mon application
         if not app_id:
-            print("Add your app id in line no. 110")
+            print("id de notre application")
         client = wolframalpha.Client(app_id)
         res = client.query(question)  # wolram alpha repond a certaines questions what,when mais pas a who
         ans = str(next(res.results).text).replace('.', '.\n')
@@ -135,7 +135,7 @@ def reponse_finale(question):
 
     except :
         try:
-            print("Exception at first run")
+            print("Exception au premier demarage")
             q_type = classifier_questions(question)
             if q_type == 'Definition' or q_type == 'Location':
                 print("except-wiki")

@@ -8,7 +8,7 @@ def summarize(raw_docx):
     raw_text = raw_docx
     docx = nlp(raw_text)
     stopwords = list(STOP_WORDS)
-    # Build Word Frequency # word.text is tokenization in spacy
+    # Calculer la frequence des mots # word.text c'est la tokenisation dans spacy
     word_frequencies = {}
     for word in docx:
         if word.text not in stopwords:
@@ -40,12 +40,12 @@ def summarize(raw_docx):
     summarized_sentences = nlargest(7, sentence_scores, key=sentence_scores.get)
     final_sentences = [ w.text for w in summarized_sentences ]
     summary = ' '.join(final_sentences)
-    print("Original Document\n")
+    print("Document Original\n")
     print(raw_docx)
-    print("Total Length:",len(raw_docx))
-    print('\n\nSummarized Document\n')
+    print("Longueur totale:",len(raw_docx))
+    print('\n\nDocument Resumé\n')
     print(summary)
-    print("Total Length:",len(summary))
+    print("Longueur totale:",len(summary))
     return summary
 
 

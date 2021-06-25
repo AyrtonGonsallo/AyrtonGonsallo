@@ -135,7 +135,7 @@ def create_app(configfile=None):
         session_id = get_hash()
         log("Created session id", session_id=session_id)
 
-        # make questions
+        # creer les questions avec des blancs
         raw_data = str(request.form.get("data"))
         questions_avec_blancs = Document(raw_data).format_questions()
 
